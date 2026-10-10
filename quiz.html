@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Quiz</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background: #113619;
+            color: #ffffff;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 240px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 30px 20px;
+            border-right: 1px solid rgba(240, 180, 0, 0.3);
+        }
+
+        .sidebar h2 {
+            color: #f0b400;
+            margin-bottom: 25px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            background: rgba(240, 180, 0, 0.2);
+            color: #f0b400;
+        }
+
+        /* Main Content Layout */
+        .section {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .section h1 {
+            margin-bottom: 25px;
+        }
+
+        /* Quiz Container */
+        .quiz-box {
+            width: 600px;
+            max-width: 90%;
+            padding: 35px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(240, 180, 0, 0.3);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .progress {
+            margin-bottom: 20px;
+            color: #f5c518;
+            font-weight: bold;
+        }
+
+        .quiz-question {
+            font-size: 24px;
+            margin-bottom: 25px;
+            color: #ffffff;
+        }
+
+        .quiz-option {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 12px 0;
+            border: 2px solid #f0b400;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 17px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: left;
+        }
+
+        .quiz-option:hover {
+            background: #f0b400;
+            color: #113619;
+            transform: translateY(-3px);
+        }
+
+        .quiz-option.selected {
+            background: #f0b400;
+            color: #113619;
+            font-weight: bold;
+        }
+
+        .quiz-button {
+            margin-top: 20px;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 25px;
+            background: #f0b400;
+            color: #113619;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .quiz-button:hover {
+            background: white;
+            transform: translateY(-3px);
+        }
+
+        #result {
+            display: none;
+            font-size: 28px;
+            color: #f5c518;
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <h2>My School</h2>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="program.html">Academic Programs</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="quiz.html">School Quiz</a>
+    </div>
+
+    <div class="section">
+        <h1>School Quiz</h1>
+
+        <div class="quiz-box">
+            <div class="progress" id="progress">Question 1 of 5</div>
+            <div class="quiz-question" id="question">Question goes here</div>
+            <div id="options"></div>
+
+            <button class="quiz-button" id="next-btn" onclick="nextQuestion()">Next</button>
+            <div id="result"></div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Which course focuses on computers and programming?",
+                options: ["Computer Science", "Hospitality Management", "Business Administration", "Education"],
+                answer: "Computer Science"
+            },
+            {
+                question: "Which subject mainly deals with numbers and calculations?",
+                options: ["English", "Mathematics", "Filipino", "Values Education"],
+                answer: "Mathematics"
+            },
+            {
+                question: "Which program is related to hotels and tourism?",
+                options: ["Computer Science", "Elementary Education", "Hospitality Management", "Secondary Education"],
+                answer: "Hospitality Management"
+            },
+            {
+                question: "Which of these is a language subject?",
+                options: ["Science", "Mathematics", "English", "Business Administration"],
+                answer: "English"
+            },
+            {
+                question: "What is one goal of education?",
+                options: ["To stop learning", "To develop knowledge and skills", "To avoid challenges", "To prevent students from asking questions"],
+                answer: "To develop knowledge and skills"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let selectedAnswer = "";
+
+        function showQuestion() {
+            const question = questions[currentQuestion];
+
+            document.getElementById("progress").textContent =
+                "Question " + (currentQuestion + 1) + " of " + questions.length;
+
+            document.getElementById("question").textContent = question.question;
+
+            const optionsContainer = document.getElementById("options");
+            optionsContainer.innerHTML = "";
+            selectedAnswer = "";
+
+            question.options.forEach(function(option) {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.classList.add("quiz-option");
+
+                button.onclick = function() {
+                    selectedAnswer = option;
+                    document.querySelectorAll(".quiz-option").forEach(function(btn) {
+                        btn.classList.remove("selected");
+                    });
+                    button.classList.add("selected");
+                };
+
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function nextQuestion() {
+            if (selectedAnswer === "") {
+                alert("Please choose an answer first.");
+                return;
+            }
+
+            if (selectedAnswer === questions[currentQuestion].answer) {
+                score++;
+            }
+
+            currentQuestion++;
+
+            if (currentQuestion < questions.length) {
+                showQuestion();
+            } else {
+                document.getElementById("question").style.display = "none";
+                document.getElementById("options").style.display = "none";
+                document.getElementById("next-btn").style.display = "none";
+                document.getElementById("progress").style.display = "none";
+
+                const result = document.getElementById("result");
+                result.style.display = "block";
+                result.innerHTML = "Your Score: " + score + " / " + questions.length;
+            }
+        }
+
+        showQuestion();
+    </script>
+
+</body>
+</html>

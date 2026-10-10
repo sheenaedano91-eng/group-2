@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enrollment Form</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+
+        input[type="radio"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #cbd5e1;
+            border-radius: 50%;
+            outline: none;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        input[type="radio"]:checked {
+            border-color: #0284c7;
+            background-color: #0284c7;
+            box-shadow: inset 0 0 0 3px #ffffff;
+        }
+
+        .form-input {
+            width: 100%;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.5rem;
+            padding: 0.625rem 0.875rem;
+            font-size: 0.95rem;
+            color: #1e293b;
+            background-color: #ffffff;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #0284c7;
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+        }
+
+        .signature-pad {
+            border: 1px solid #cbd5e1;
+            border-radius: 0.5rem;
+            background-color: #ffffff;
+            touch-action: none;
+        }
+    </style>
+</head>
+<body class="py-10 px-4 sm:px-6 lg:px-8">
+
+    <div class="max-w-4xl mx-auto bg-white p-6 sm:p-10 rounded-2xl shadow-xl border border-slate-200">
+        
+        <div class="mb-8 border-b border-slate-100 pb-4">
+            <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Enrollment Form</h1>
+            <p class="text-sm text-slate-500 mt-1">Please fill out all required details accurately.</p>
+        </div>
+
+        <h2 class="text-lg font-semibold text-slate-900 mb-4">Student Information</h2>
+        
+        <form id="enrollmentForm" onsubmit="handleFormSubmit(event)" class="space-y-6">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="fullName" class="block text-sm font-bold text-slate-900 mb-2">Full Name</label>
+                    <input type="text" id="fullName" name="fullName" class="form-input" placeholder="Last Name, First Name, Middle Name" required>
+                </div>
+                <div>
+                    <label for="dob" class="block text-sm font-bold text-slate-900 mb-2">Date of Birth</label>
+                    <input type="date" id="dob" name="dob" class="form-input text-slate-500" required>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="phone" class="block text-sm font-bold text-slate-900 mb-2">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" class="form-input" placeholder="09123456789" required>
+                </div>
+                <div>
+                    <label for="email" class="block text-sm font-bold text-slate-900 mb-2">Email Address</label>
+                    <input type="email" id="email" name="email" class="form-input" placeholder="student@example.com" required>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="address" class="block text-sm font-bold text-slate-900 mb-2">Current Address</label>
+                    <input type="text" id="address" name="address" class="form-input" placeholder="Street, Barangay, City, Province" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-900 mb-2">Gender</label>
+                    <div class="flex flex-wrap items-center gap-4 pt-2">
+                        <label class="flex items-center space-x-2 cursor-pointer">
+                            <input type="radio" name="gender" value="Male" checked>
+                            <span class="text-sm text-slate-700 font-medium">Male</span>
+                        </label>
+                        <label class="flex items-center space-x-2 cursor-pointer">
+                            <input type="radio" name="gender" value="Female">
+                            <span class="text-sm text-slate-700 font-medium">Female</span>
+                        </label>
+                        <label class="flex items-center space-x-2 cursor-pointer">
+                            <input type="radio" name="gender" value="Prefer Not to Say">
+                            <span class="text-sm text-slate-700 font-medium">I Prefer Not to Say</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4 border-t border-slate-100">
+              
+                <div>
+                    <label class="block text-sm font-bold text-slate-900 mb-3">Year Level</label>
+                    <div class="space-y-3">
+                        <label class="flex items-center space-x-3 cursor-pointer">
+                            <input type="radio" name="yearLevel" value="Junior High School" checked onchange="toggleProgramOptions()">
+                            <span class="text-sm text-slate-700 font-medium">Junior High School</span>
+                        </label>
+                        
+                        <div>
+                            <label class="flex items-center space-x-3 cursor-pointer">
+                                <input type="radio" name="yearLevel" id="shsRadio" value="Senior High School" onchange="toggleProgramOptions()">
+                                <span class="text-sm text-slate-700 font-medium">Senior High School</span>
+                            </label>
+                            
+                            <div id="shsOptions" class="hidden ml-7 mt-2 space-y-2 border-l-2 border-slate-200 pl-3 py-1">
+                                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Select Strand:</p>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="radio" name="shsStrand" value="STEM">
+                                    <span class="text-sm text-slate-600">STEM</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="radio" name="shsStrand" value="HUMSS">
+                                    <span class="text-sm text-slate-600">HUMSS</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="radio" name="shsStrand" value="ABM">
+                                    <span class="text-sm text-slate-600">ABM</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="flex items-center space-x-3 cursor-pointer">
+                                <input type="radio" name="yearLevel" id="collegeRadio" value="College" onchange="toggleProgramOptions()">
+                                <span class="text-sm text-slate-700 font-medium">College</span>
+                            </label>
+
+                            <div id="collegeOptions" class="hidden ml-7 mt-2 space-y-2 border-l-2 border-slate-200 pl-3 py-1">
+                                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Select Course:</p>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="radio" name="collegeCourse" value="BSCS">
+                                    <span class="text-sm text-slate-600">BSCS</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="radio" name="collegeCourse" value="BSBA">
+                                    <span class="text-sm text-slate-600">BSBA</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="radio" name="collegeCourse" value="BSHM">
+                                    <span class="text-sm text-slate-600">BSHM</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="radio" name="collegeCourse" value="BSEd Eng">
+                                    <span class="text-sm text-slate-600">BSEd Eng</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="radio" name="collegeCourse" value="BSEd Fil">
+                                    <span class="text-sm text-slate-600">BSEd Fil</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-bold text-slate-900 mb-3">Parent/Guardian Information</label>
+                    <div class="space-y-4">
+                        <div>
+                            <label for="guardianName" class="block text-xs font-semibold text-slate-600 mb-1">Parent/Guardian Name</label>
+                            <input type="text" id="guardianName" name="guardianName" class="form-input" placeholder="Full Name" required>
+                        </div>
+                        <div>
+                            <label for="guardianContact" class="block text-xs font-semibold text-slate-600 mb-1">Contact Number</label>
+                            <input type="tel" id="guardianContact" name="guardianContact" class="form-input" placeholder="09123456789" required>
+                        </div>
+                        <div>
+                            <label for="guardianEmail" class="block text-xs font-semibold text-slate-600 mb-1">Email Address</label>
+                            <input type="email" id="guardianEmail" name="guardianEmail" class="form-input" placeholder="guardian@example.com" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-4 border-t border-slate-100">
+                <h3 class="text-md font-bold text-slate-900 mb-4">Required Document Submissions</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label for="idImage" class="block text-sm font-bold text-slate-900 mb-2">
+                            Provide a 1x1 Image
+                        </label>
+                        <input type="file" id="idImage" name="idImage" class="form-input text-sm" accept="image/*" required>
+                        <p class="text-xs text-slate-400 mt-1">Upload a clear 1x1 ID photo.</p>
+                    </div>
+
+                    <div>
+                        <label for="birthCertificate" class="block text-sm font-bold text-slate-900 mb-2">
+                            Birth Certificate
+                        </label>
+                        <input type="file" id="birthCertificate" name="birthCertificate" class="form-input text-sm" accept="image/*,.pdf" required>
+                        <p class="text-xs text-slate-400 mt-1">PSA/NSO Birth Certificate (Image or PDF).</p>
+                    </div>
+
+                    <div>
+                        <label for="form137" class="block text-sm font-bold text-slate-900 mb-2">
+                            Form 137 / Report Card
+                        </label>
+                        <input type="file" id="form137" name="form137" class="form-input text-sm" accept="image/*,.pdf" required>
+                        <p class="text-xs text-slate-400 mt-1">Official transcript or Grade Slip (Image or PDF).</p>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="pt-4 border-t border-slate-100">
+                <p class="text-sm text-slate-700 font-medium leading-relaxed">
+                    I certify that all information provided in this application is true and complete to the best of my knowledge.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-end pt-2">
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="block text-sm font-bold text-slate-900">Signature</label>
+                        <button type="button" onclick="clearSignature()" class="text-xs text-slate-500 hover:text-indigo-600 underline">Clear Pad</button>
+                    </div>
+                    <canvas id="signatureCanvas" class="signature-pad w-full h-24"></canvas>
+                </div>
+                <div>
+                    <label for="signDate" class="block text-sm font-bold text-slate-900 mb-2">Date of Submission</label>
+                    <input type="date" id="signDate" name="signDate" class="form-input text-slate-500" required>
+                </div>
+            </div>
+
+            
+            <div class="pt-6">
+                <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3.5 px-6 rounded-xl shadow-lg transition duration-200 transform active:scale-[0.99]">
+                    Submit Enrollment
+                </button>
+            </div>
+        </form>
+
+        <div id="modalAlert" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+            <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 text-center">
+                <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 mb-2">Enrollment Submitted!</h3>
+                <p class="text-sm text-slate-600 mb-6" id="modalText">Thank you for submitting your enrollment form.</p>
+                <button onclick="closeModal()" class="w-full bg-slate-900 text-white font-semibold py-2.5 rounded-lg hover:bg-slate-800 transition">
+                    Close Window
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+   
+        const canvas = document.getElementById('signatureCanvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+
+        function resizeCanvas() {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = '#0f172a';
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        window.addEventListener('load', resizeCanvas);
+
+        canvas.addEventListener('mousedown', (e) => {
+            isDrawing = true;
+            ctx.beginPath();
+            ctx.moveTo(e.offsetX, e.offsetY);
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (isDrawing) {
+                ctx.lineTo(e.offsetX, e.offsetY);
+                ctx.stroke();
+            }
+        });
+
+        canvas.addEventListener('mouseup', () => isDrawing = false);
+        canvas.addEventListener('mouseleave', () => isDrawing = false);
+
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const touch = e.touches[0];
+            isDrawing = true;
+            ctx.beginPath();
+            ctx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
+        }, { passive: false });
+
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            if (isDrawing) {
+                const rect = canvas.getBoundingClientRect();
+                const touch = e.touches[0];
+                ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
+                ctx.stroke();
+            }
+        }, { passive: false });
+
+        canvas.addEventListener('touchend', () => isDrawing = false);
+
+        function clearSignature() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function toggleProgramOptions() {
+            const isSHS = document.getElementById('shsRadio').checked;
+            const isCollege = document.getElementById('collegeRadio').checked;
+            
+            const shsOptions = document.getElementById('shsOptions');
+            const collegeOptions = document.getElementById('collegeOptions');
+
+            if (isSHS) {
+                shsOptions.classList.remove('hidden');
+                collegeOptions.classList.add('hidden');
+                document.querySelectorAll('input[name="collegeCourse"]').forEach(r => r.checked = false);
+            } else if (isCollege) {
+                collegeOptions.classList.remove('hidden');
+                shsOptions.classList.add('hidden');
+                document.querySelectorAll('input[name="shsStrand"]').forEach(r => r.checked = false);
+            } else {
+                shsOptions.classList.add('hidden');
+                collegeOptions.classList.add('hidden');
+                document.querySelectorAll('input[name="shsStrand"]').forEach(r => r.checked = false);
+                document.querySelectorAll('input[name="collegeCourse"]').forEach(r => r.checked = false);
+            }
+        }
+
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const fullName = document.getElementById('fullName').value;
+            document.getElementById('modalText').innerText = `Thank you, ${fullName}. Your enrollment application and attached documents have been successfully received.`;
+            document.getElementById('modalAlert').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('modalAlert').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
